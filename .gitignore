@@ -1,3 +1,6 @@
+# CLion
+.idea/
+
 # Prerequisites
 *.d
 
@@ -30,3 +33,7 @@
 *.exe
 *.out
 *.app
+
+# Builds
+/cmake-build*
+/cmake-build*
