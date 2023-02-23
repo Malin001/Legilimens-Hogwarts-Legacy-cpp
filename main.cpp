@@ -138,7 +138,7 @@ std::string getCollectibleString(const CollectibleStruct& collectible) {
     if (!timestampParen[collectible.type].empty()) {
         result += " (" + timestampParen[collectible.type] + ")";
     }
-    return result + " - https://youtu.be/" + videoIds[collectible.video] + "&=" + std::to_string(collectible.timestamp);
+    return result + " - https://youtu.be/" + videoIds[collectible.video] + "&t=" + std::to_string(collectible.timestamp);
 }
 
 // Runs Legilimens and returns whether it was successful
