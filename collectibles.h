@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 enum CollectibleEnum {
     Revelio = 0,
@@ -20,10 +21,12 @@ enum CollectibleEnum {
     Foe = 12,
     ButterflyChest = 13,
     VivariumChest = 14,
-    MiscChest = 15,
-    ArithmancyChest = 16,
-    DungeonChest = 17,
-    CampChest = 18
+    MiscWandChest = 15,
+    MiscConjChest = 16,
+    ArithmancyChest = 17,
+    DungeonChest = 18,
+    CampChest = 19,
+    FinishingTouchEnemy = 20
 };
 
 enum TableEnum {
@@ -32,7 +35,8 @@ enum TableEnum {
     LootDropComponentDynamic = 2,
     EconomicExpiryDynamic = 3,
     MiscDataDynamic = 4,
-    MapLocationDataDynamic = 5
+    MapLocationDataDynamic = 5,
+    AchievementDynamic = 6
 };
 
 enum RegionEnum {
@@ -59,7 +63,8 @@ enum RegionEnum {
     NorthHogwartsRegion = 20,
     PoidsearCoast = 21,
     SouthHogwartsRegion = 22,
-    SouthSeaBog = 23
+    SouthSeaBog = 23,
+    FinishingTouch = 24
 };
 
 struct CollectibleStruct {
@@ -68,7 +73,13 @@ struct CollectibleStruct {
     uint8_t video;
     uint16_t timestamp;
     RegionEnum region;
-    uint8_t index;
+    std::string index;
+};
+
+struct Filter {
+    std::string cli;
+    std::string name;
+    std::vector<CollectibleEnum> types;
 };
 
 // extern const std::string collectibleNames[];
@@ -80,5 +91,7 @@ extern const std::string regionNames[];
 extern const std::string globalRegionNames[];
 extern const std::string videoIds[];
 extern const std::vector<CollectibleStruct> collectibles;
+extern const std::vector<std::vector<std::string>> affectedCollectibles;
+extern const std::vector<Filter> filterOptions;
 
 #endif //LEGILIMENS_HOGWARTS_LEGACY_CPP_COLLECTIBLES_H
