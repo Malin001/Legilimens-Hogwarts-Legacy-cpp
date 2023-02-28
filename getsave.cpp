@@ -93,6 +93,7 @@ std::vector<SaveList> getSaveList() {
     CoTaskMemFree(path_tmp);
     // Find users folder
     users = localAppData / "HogwartsLegacy" / "Saved" / "SaveGames";
+    if (!std::filesystem::is_directory(users)) users = localAppData / "Hogwarts Legacy" / "Saved" / "SaveGames";
     if (!std::filesystem::is_directory(users)) return result;
     // Find each user
     std::string charIndex;

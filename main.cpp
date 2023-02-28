@@ -13,7 +13,7 @@
 #include "color.hpp"
 
 #define DB_IMAGE_STR "RawDatabaseImage"
-#define VERSION "0.2.0"
+#define VERSION "0.2.1"
 
 void printTitle() {
     tabulate::Table table;
