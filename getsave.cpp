@@ -98,6 +98,7 @@ std::vector<SaveList> getSaveList() {
     // Find each user
     std::string charIndex;
     for (auto const& userFolder : std::filesystem::directory_iterator{users}) {
+        if (!std::filesystem::is_directory(userFolder)) continue;
         std::unordered_map<std::string, std::vector<std::filesystem::path>> savesByChar;
         // Get saves for each user,
         for (auto const& saveFile : std::filesystem::directory_iterator{userFolder}) {

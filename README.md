@@ -39,8 +39,12 @@ Some example commands:
 - `Legilimens.exe C:\Users\USER\AppData\Local\HogwartsLegacy\Saved\SaveGames\USERID\HL-00-00.sav` will prompt you for which filters to use before outputting all of the corresponding missing collectibles
 
 ## FAQ
+#### Legilimens says I'm missing Butterfly Chest #1, but there aren't any butterflies there and I've already done the "Follow the Butterflies" quest?
+- This is a known bug with Hogwarts Legacy, where following any of the other 14 butterflies allows you to complete the quest, which then prevents the intended quest butterflies from ever appearing. Legilimens doesn't have a fix for this, but I believe there are some save editors which can reactivate the quest and allow you to get the last butterflies.
+#### I'm missing a single conjuration exploration collectible, but Legilimens doesn't detect anything?
+- This is almost certainly another [bug in the game](https://hogwartslegacy.bugs.wbgames.com/bug/HL-3868). I don't know what causes it. I don't know how to fix it. I've spent hours looking at my code and at saves that people have sent me with this problem, and I haven't found anything that indicates it's a problem with Legilimens. If this bug happens to you and you manage to find where the last conjuration is, *please* let me know so I can update this tool.
 #### I have 33/34 Field Guide Pages in The Bell Tower Wing, but Legilimens says I've completed them all. Where is it?
-- This is a known bug in Hogwarts Legacy that has since been patched, where a certain Bell Tower Wing [flying page](https://youtu.be/KnHZ5gVb_qk&t=104) doesn't count towards your total.
+- This is a known bug in Hogwarts Legacy that has since been patched, where a certain Bell Tower Wing [flying page](https://youtu.be/KnHZ5gVb_qk&t=104) doesn't count towards your total. I don't know if the patch retroactively fixed the problem.
 #### Legilimens says that I'm missing something that I've already collected, or doesn't detect all of my missing collectibles, or links to the wrong Youtube video/timestamp, or any other error.
 - It's likely an error in my code, so open an [issue](https://github.com/Malin001/Legilimens-Hogwarts-Legacy-cpp/issues) on GitHub, and attach your `.sav` file. I'll do my best to figure out what went wrong and fix it as soon as possible. If you don't have a GitHub account, you can also email your save file to me at Malin4750@gmail.com, or post the output of Legilimens on [Nexus](https://www.nexusmods.com/hogwartslegacy/mods/556). ***If you don't send me either the save file or output, I won't be able to fix the problem for everyone else.***
 #### I'm getting the error "SQLite was unable to read parts of the database", which is preventing me from finishing certain collectibles. How can I fix this?

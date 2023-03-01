@@ -13,7 +13,7 @@
 #include "color.hpp"
 
 #define DB_IMAGE_STR "RawDatabaseImage"
-#define VERSION "0.2.1"
+#define VERSION "0.2.2"
 
 void printTitle() {
     tabulate::Table table;
@@ -28,7 +28,10 @@ void printTitle() {
     table.add_row({R"(|                           |___/                                              |)"});
     table.add_row({"A Hogwarts Legacy tool to find your missing collectibles"});
     table.add_row({"https://github.com/Malin001/Legilimens-Hogwarts-cpp"});
-    table.add_row({"Version 0.2.0 - Created by Malin"});
+    std::string versionStr = "Version ";
+    versionStr += VERSION;
+    versionStr += " - Created by Malin";
+    table.add_row({versionStr});
     table.row(0).format().show_border_top();
     for (int i = 0; i < 8; i++) table.row(i).format().padding_left(0).padding_right(0);
     table.row(8).format().show_border_top();
