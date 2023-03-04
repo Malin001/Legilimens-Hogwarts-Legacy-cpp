@@ -29,7 +29,7 @@ void printTitle(std::ostream &stream) {
     table.add_row({R"(|                            __/ |                                             |)"});
     table.add_row({R"(|                           |___/                                              |)"});
     table.add_row({"A Hogwarts Legacy tool to find your missing collectibles"});
-    table.add_row({"https://github.com/Malin001/Legilimens-Hogwarts-cpp"});
+    table.add_row({"https://github.com/Malin001/Legilimens-Hogwarts-Legacy-cpp"});
     std::string versionStr = "Version ";
     versionStr += VERSION;
     versionStr += " - Created by Malin";
