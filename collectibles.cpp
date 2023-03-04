@@ -1,39 +1,77 @@
 #include "collectibles.h"
 
-// Maps from CollectibleEnums
-// const std::string collectibleNames[] = { "Revelio", "Flying", "Moth", "Brazier", "Statue", "DaedalianKey", "Demiguise", "Balloon", "Landing", "Merlin", "Astronomy", "AncientMagic", "Foe", "ButterflyChest", "VivariumChest", "MiscWandChest", "MiscConjChest", "ArithmancyChest", "DungeonChest", "CampChest", "FinishingTouch" };
-const std::string timestampNames[] = { "Field guide page", "Field guide page", "Field guide page", "Field guide page", "Field guide page", "Daedalian Key", "Demiguise Moon", "Balloon Set", "Landing Platform", "Merlin Trial", "Astronomy Table", "Ancient Magic Hotspot", "Infamous Foe", "Butterfly Chest", "Collection Chest", "Collection Chest", "Collection Chest", "Collection Chest", "Collection Chest", "Collection Chest", "Finishing Touch Enemy" };
-const std::string timestampParen[] = { "Revelio", "Flying", "Moth painting", "Confringo brazier", "Levioso statue", "", "", "", "", "", "", "", "", "", "Vivarium", "", "", "Arithmancy door", "Dungeon", "Bandit camp", "" };
-const TableEnum collectibleTables[] = { CollectionDynamic, MapLocationDataDynamic, MiscDataDynamic, MiscDataDynamic, MiscDataDynamic, MiscDataDynamic, MapLocationDataDynamic, MapLocationDataDynamic, MapLocationDataDynamic, SphinxPuzzleDynamic, MapLocationDataDynamic, MapLocationDataDynamic, MapLocationDataDynamic, EconomicExpiryDynamic, LootDropComponentDynamic, MapLocationDataDynamic, MapLocationDataDynamic, MapLocationDataDynamic, MapLocationDataDynamic, MapLocationDataDynamic, AchievementDynamic };
+// Maps from CollectibleEnum
+const std::vector<CollectibleType> collectibleTypes = {
+        { "Revelio", "Field guide page", "Revelio", "", CollectionDynamic },
+        { "Flying", "Field guide page", "Flying", "", MapLocationDataDynamic },
+        { "Moth", "Field guide page", "Moth painting", "", MiscDataDynamic },
+        { "Brazier", "Field guide page", "Confringo brazier", "", MiscDataDynamic },
+        { "Statue", "Field guide page", "Levioso statue", "", MiscDataDynamic },
+        { "DaedalianKey", "Daedalian Key", "", "", MiscDataDynamic },
+        { "Demiguise", "Demiguise Moon", "", "", MapLocationDataDynamic },
+        { "Balloon", "Balloon Set", "", "", MapLocationDataDynamic },
+        { "Landing", "Landing Platform", "", "", MapLocationDataDynamic },
+        { "Merlin", "Merlin Trial", "", "", SphinxPuzzleDynamic },
+        { "Astronomy", "Astronomy Table", "", "", MapLocationDataDynamic },
+        { "AncientMagic", "Ancient Magic Hotspot", "", "", MapLocationDataDynamic },
+        { "Foe", "Infamous Foe", "", "", MapLocationDataDynamic },
+        { "ButterflyChest", "Butterfly Chest", "", "", EconomicExpiryDynamic },
+        { "VivariumChest", "Collection Chest", "Vivarium", "", LootDropComponentDynamic },
+        { "MiscWandChest", "Collection Chest", "", "Collection Chest (Conjurations)", MapLocationDataDynamic },
+        { "MiscConjChest", "Collection Chest", "", "Collection Chest (Wand skins)", MapLocationDataDynamic },
+        { "ArithmancyChest", "Collection Chest", "Arithmancy door", "", MapLocationDataDynamic },
+        { "DungeonChest", "Collection Chest", "Dungeon", "", MapLocationDataDynamic },
+        { "CampChest", "Collection Chest", "Bandit camp", "", MapLocationDataDynamic },
+        { "FinishingTouches", "Finishing Touches", "", "Achievement - Finishing Touches", AchievementDynamic }
+};
 
 // Maps from TableEnum
-const std::vector<std::string> queries = {
-        "SELECT ItemID FROM CollectionDynamic WHERE ItemState='Obtained';",
-        "SELECT SphinxPuzzleGUID FROM SphinxPuzzleDynamic WHERE EInteractiveState=34;",
-        "SELECT LootGroup FROM LootDropComponentDynamic;",
-        "SELECT UniqueID FROM EconomicExpiryDynamic;",
-        "SELECT DataName FROM MiscDataDynamic WHERE DataValue='1';",
-        "SELECT MapLocationID FROM MapLocationDataDynamic WHERE State=11;",
-        "SELECT OneOfEach FROM AchievementDynamic WHERE AchievementID='PFA_43';"
-};
-const std::vector<std::vector<std::string>> affectedCollectibles = {
-        {"Revelio field guide pages"},
-        {"Merlin trials"},
-        {"Vivarium chests"},
-        {"Butterfly chests"},
-        {"Brazier/Moth/Statue field guide pages", "Daedalian Key"},
-        {"Flying field guide pages", "Collection Chests", "Demiguise Moons", "Balloon Sets", "Landing Platforms", "Astronomy Tables", "Ancient Magic Hotspots", "Infamous Foes"},
-        {"Finishing Touch enemies"}
+const std::vector<QueryStruct> tables = {
+        {"SELECT ItemID FROM CollectionDynamic WHERE ItemState='Obtained';", false, {"Revelio field guide pages"}},
+        {"SELECT SphinxPuzzleGUID FROM SphinxPuzzleDynamic WHERE EInteractiveState=34;", false, {"Merlin trials"}},
+        {"SELECT LootGroup FROM LootDropComponentDynamic;", false, {"Vivarium chests"}},
+        {"SELECT UniqueID FROM EconomicExpiryDynamic;", false, {"Butterfly chests"}},
+        {"SELECT DataName FROM MiscDataDynamic WHERE DataValue='1';", false, {"Brazier/Moth/Statue field guide pages", "Daedalian Key"}},
+        {"SELECT MapLocationID FROM MapLocationDataDynamic WHERE State=11;", false, {"Flying field guide pages", "Collection Chests", "Demiguise Moons", "Balloon Sets", "Landing Platforms", "Astronomy Tables", "Ancient Magic Hotspots", "Infamous Foes"}},
+        {"SELECT OneOfEach FROM AchievementDynamic WHERE AchievementID='PFA_43';", true, {"Finishing Touches enemies"}},
+        {"SELECT ActivityName FROM PlayerStatsDynamic WHERE ActivityValue='Complete';", false, {"Butterfly quest bug detector"}},
+        {"SELECT ItemID FROM CollectionDynamic WHERE ItemState='Obtained' AND SubcategoryID='Exploration' AND CategoryID='Conjurations';", false, {"Conjuration bug detector"}}
 };
 
 // Maps from RegionEnum
-const std::string regionNames[] = { "Butterflies", "Daedalian Keys", "Hogsmeade", "The Astronomy Wing", "The Bell Tower Wing", "The Grand Staircase", "The Great Hall", "The Library Annex", "The South Wing", "Vivariums", "Clagmar Coast", "Coastal Cavern", "Cragcroftshire", "Feldcroft Region", "Forbidden Forest", "Hogsmeade Valley", "Hogwarts Valley", "Manor Cape", "Marunweem Lake", "North Ford Bog", "North Hogwarts Region", "Poidsear Coast", "South Hogwarts Region", "South Sea Bog", "Finishing Touch (EXPERIMENTAL, LIKELY BROKEN)" };
-const std::string globalRegionNames[] = { "", "", "", "Hogwarts", "Hogwarts", "Hogwarts", "Hogwarts", "Hogwarts", "Hogwarts", "Hogwarts", "The Highlands", "The Highlands", "The Highlands", "The Highlands", "The Highlands", "The Highlands", "The Highlands", "The Highlands", "The Highlands", "The Highlands", "The Highlands", "The Highlands", "The Highlands", "The Highlands", "Achievements" };
+const std::vector<RegionStruct> regions = {
+        { "Butterflies", "" },
+        { "Daedalian Keys", "" },
+        { "Hogsmeade", "" },
+        { "The Astronomy Wing", "Hogwarts" },
+        { "The Bell Tower Wing", "Hogwarts" },
+        { "The Grand Staircase", "Hogwarts" },
+        { "The Great Hall", "Hogwarts" },
+        { "The Library Annex", "Hogwarts" },
+        { "The South Wing", "Hogwarts" },
+        { "Vivariums", "Hogwarts" },
+        { "Clagmar Coast", "The Highlands" },
+        { "Coastal Cavern", "The Highlands" },
+        { "Cragcroftshire", "The Highlands" },
+        { "Feldcroft Region", "The Highlands" },
+        { "Forbidden Forest", "The Highlands" },
+        { "Hogsmeade Valley", "The Highlands" },
+        { "Hogwarts Valley", "The Highlands" },
+        { "Manor Cape", "The Highlands" },
+        { "Marunweem Lake", "The Highlands" },
+        { "North Ford Bog", "The Highlands" },
+        { "North Hogwarts Region", "The Highlands" },
+        { "Poidsear Coast", "The Highlands" },
+        { "South Hogwarts Region", "The Highlands" },
+        { "South Sea Bog", "The Highlands" },
+        { "Finishing Touches", "Achievements" }
+};
 
-const std::string videoIds[] = { "na_PmDfcgs8", "TmJz8SdyIBk", "KnHZ5gVb_qk", "ujZ2ri9NWT0", "N7qlkJ_X_GM", "-UXr4u2lCyI", "zFQnNOiRKc4", "JgmGuUtmNpU", "5YFrI_xahlE", "wsEFQuug8To", "M8lTSHCqKj0", "2bwmWe9Wtl0", "DgldMhGeCyU", "PN3WBQYaf54", "E7mo2BZHa4Q", "eTcCMO2FEsQ", "fEd5v0gjvpQ", "rJAZM882ruM", "6opEItpQCjI", "gYs24rpRPZ0", "XFvSJbUJU9A", "P1nYcWHPAMU", "ydm1hlweOTU", "ImMInXddlXE", "lAzaoDebGVM", "3rTORHz1yPM" };
+// Maps from CollectibleStruct.video
+const std::string videoIds[] = { "na_PmDfcgs8", "TmJz8SdyIBk", "KnHZ5gVb_qk", "ujZ2ri9NWT0", "N7qlkJ_X_GM", "-UXr4u2lCyI", "zFQnNOiRKc4", "JgmGuUtmNpU", "5YFrI_xahlE", "wsEFQuug8To", "M8lTSHCqKj0", "2bwmWe9Wtl0", "DgldMhGeCyU", "Q5KxxxA0aGs", "E7mo2BZHa4Q", "eTcCMO2FEsQ", "fEd5v0gjvpQ", "rJAZM882ruM", "6opEItpQCjI", "gYs24rpRPZ0", "XFvSJbUJU9A", "P1nYcWHPAMU", "ydm1hlweOTU", "ImMInXddlXE", "lAzaoDebGVM", "3rTORHz1yPM"};
 
 const std::vector<Filter> filterOptions = {
-        {"ALL", "Everything", {Revelio, Flying, Moth, Brazier, Statue, DaedalianKey, Demiguise, Balloon, Landing, Merlin, Astronomy, AncientMagic, Foe, ButterflyChest, VivariumChest, MiscWandChest, MiscConjChest, ArithmancyChest, DungeonChest, CampChest, FinishingTouchEnemy}},
+        {"ALL", "Everything", {}},
         {"PAGES", "Field Guide Pages", {Revelio, Flying, Moth, Brazier, Statue}},
         {"CHESTS", "Collection Chests", {ButterflyChest, VivariumChest, MiscWandChest, MiscConjChest, ArithmancyChest, DungeonChest, CampChest}},
         {"DEMIGUISE", "Demiguise Moons", {Demiguise}},
@@ -47,7 +85,8 @@ const std::vector<Filter> filterOptions = {
         {"ACHIEVEMENTS", "Achievements", {FinishingTouchEnemy}},
         {"TRAITS", "Gear Traits", {CampChest}},
         {"CONJURATIONS", "Conjurations", {MiscConjChest, ArithmancyChest, DungeonChest, ButterflyChest, VivariumChest}},
-        {"WANDS", "Wand handles", {MiscWandChest}}
+        {"WANDS", "Wand handles", {MiscWandChest}},
+        {"SORTTYPE", "Sort by type", {}}
 };
 
 // List of all collectibles
@@ -435,7 +474,7 @@ const std::vector<CollectibleStruct> collectibles = {
         { Foe, "INT_Kill_NamedDWThiefCaptain1", 21, 459, ClagmarCoast, "1" },
         { CampChest, "Chest_BCC_GearTrait_X=552501 Y=-34577 Z=-90702", 21, 485, ClagmarCoast, "4" },
         { CampChest, "Chest_BCC_GearTrait_X=552518 Y=-32353 Z=-90687", 21, 499, ClagmarCoast, "5" },
-        { Astronomy, "KO_Astronomy_Corvus_HS_AJ_X=423308 Y=-371105 Z=-79828", 13, 43, HogwartsValley, "2" },
+        { Astronomy, "KO_Astronomy_Corvus_HS_AJ_X=423308 Y=-371105 Z=-79828", 13, 40, HogwartsValley, "2" },
         { Revelio, "LORE_TransCourtyard_Fountain", 1, 10, TheAstronomyWing, "1" },
         { Revelio, "LORE_AstronomyWing_Desk", 1, 28, TheAstronomyWing, "2" },
         { ArithmancyChest, "Chest_HW_ConjurationsRecipe_SUB_CentralHall_TECH_X=351676 Y=-464282 Z=-85648", 1, 41, TheAstronomyWing, "1" },
@@ -739,10 +778,8 @@ const std::vector<CollectibleStruct> collectibles = {
         { FinishingTouchEnemy, "GoblinChieftain", 25, 942, FinishingTouch, "Loyalist Commander" },
         { FinishingTouchEnemy, "Inferius", 25, 1008, FinishingTouch, "Inferius" },
         { FinishingTouchEnemy, "Wolf", 25, 1057, FinishingTouch, "Dark Mongrel" },
-        { FinishingTouchEnemy, "Troll_Armored", 25, 1106, FinishingTouch, "Armoured Troll" },
         { FinishingTouchEnemy, "Troll_River", 25, 1174, FinishingTouch, "River Troll" },
         { FinishingTouchEnemy, "Troll_Forest", 25, 1220, FinishingTouch, "Forest Troll" },
-        { FinishingTouchEnemy, "Troll_Armored_2", 25, 1274, FinishingTouch, "Fortified Troll" },
         { FinishingTouchEnemy, "Troll_Mountain", 25, 1331, FinishingTouch, "Mountain Troll" },
         { FinishingTouchEnemy, "SpiderVenomous", 25, 1377, FinishingTouch, "Venomous Scurriour" },
         { FinishingTouchEnemy, "SpiderVenomousTank", 25, 1424, FinishingTouch, "Venomous Matriarch" },
@@ -750,5 +787,7 @@ const std::vector<CollectibleStruct> collectibles = {
         { FinishingTouchEnemy, "SpiderWoodlouseSpitter", 25, 1508, FinishingTouch, "Thornback Shooter" },
         { FinishingTouchEnemy, "SpiderWoodlouseTank", 25, 1553, FinishingTouch, "Thornback Matriarch" },
         { FinishingTouchEnemy, "SpiderWoodlouseSniper", 25, 1597, FinishingTouch, "Thornback Ambusher" },
-        { FinishingTouchEnemy, "SpiderVenomousSpitter", 25, 1644, FinishingTouch, "Venomous Ambusher" },
+        { FinishingTouchEnemy, "SpiderVenomousSniper", 25, 1644, FinishingTouch, "Venomous Ambusher" },
+        { FinishingTouchEnemy, "DW_Wolf", 13, 25, FinishingTouch, "Mongrel" },
+        { FinishingTouchEnemy, "SpiderVenomousSpitter", 13, 0, FinishingTouch, "Venomous Shooter" },
 };

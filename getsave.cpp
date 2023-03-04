@@ -52,10 +52,12 @@ bool readSaveInfo(const std::filesystem::path& savePath, std::string &charName, 
 
 // Returns whether file is a valid save
 bool isValid(const std::filesystem::path& savePath) {
+    // Make sure format is "HL-xx-xx.sav" and that file existss
     if (savePath.extension().string() != ".sav") return false;
     if (savePath.filename().string().length() != 12) return false;
     if (!savePath.filename().string().starts_with("HL-")) return false;
     if (!std::filesystem::exists(savePath)) return false;
+    // Check for magic header b"GVAS"
     std::ifstream fs(savePath, std::ios::in|std::ios::binary);
     if (!fs.is_open()) return false;
     std::string header;

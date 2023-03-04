@@ -36,7 +36,9 @@ enum TableEnum {
     EconomicExpiryDynamic = 3,
     MiscDataDynamic = 4,
     MapLocationDataDynamic = 5,
-    AchievementDynamic = 6
+    AchievementDynamic = 6,
+    PlayerStatsDynamic = 7,
+    CollectionDynamic2 = 8
 };
 
 enum RegionEnum {
@@ -82,16 +84,30 @@ struct Filter {
     std::vector<CollectibleEnum> types;
 };
 
-// extern const std::string collectibleNames[];
-extern const std::string timestampNames[];
-extern const std::string timestampParen[];
-extern const TableEnum collectibleTables[];
-extern const std::vector<std::string> queries;
-extern const std::string regionNames[];
-extern const std::string globalRegionNames[];
+struct CollectibleType {
+    std::string name;
+    std::string timestampName;
+    std::string timeStampParen;
+    std::string sortByTypeName;
+    TableEnum table;
+};
+
+struct QueryStruct {
+    std::string query;
+    bool oneRow;
+    std::vector<std::string> affected;
+};
+
+struct RegionStruct {
+    std::string name;
+    std::string globalRegion;
+};
+
+extern const std::vector<CollectibleType> collectibleTypes;
+extern const std::vector<QueryStruct> tables;
+extern const std::vector<RegionStruct> regions;
 extern const std::string videoIds[];
-extern const std::vector<CollectibleStruct> collectibles;
-extern const std::vector<std::vector<std::string>> affectedCollectibles;
 extern const std::vector<Filter> filterOptions;
+extern const std::vector<CollectibleStruct> collectibles;
 
 #endif //LEGILIMENS_HOGWARTS_LEGACY_CPP_COLLECTIBLES_H
