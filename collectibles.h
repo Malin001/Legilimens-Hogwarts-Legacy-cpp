@@ -66,7 +66,7 @@ enum RegionEnum {
     PoidsearCoast = 21,
     SouthHogwartsRegion = 22,
     SouthSeaBog = 23,
-    FinishingTouch = 24
+    FinishingTouches = 24
 };
 
 struct CollectibleStruct {

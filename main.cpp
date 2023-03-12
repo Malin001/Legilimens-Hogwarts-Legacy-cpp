@@ -13,7 +13,7 @@
 #include "color.hpp"
 
 #define DB_IMAGE_STR "RawDatabaseImage"
-#define VERSION "0.2.3"
+#define VERSION "0.2.4"
 #define DEFAULT_OUTPUT_FILE "legilimens-output-{TIMESTAMP}.txt"
 
 // Writes title to stream
@@ -452,9 +452,9 @@ bool legilimize(const std::filesystem::path& saveFile, const std::filesystem::pa
     }
     // Check for bugs
     if (hasButterlyBug(queryResults, queryErrors)) {
-        std::cout << std::endl << dye::red("Your save seems to be affected by the butterfly quest bug. If you're unable to collect\nButterfly Chest #1, consider using https://hogwarts-legacy-save-editor.vercel.app to fix it.") << std::endl;
+        std::cout << std::endl << dye::red("Your save seems to be affected by the butterfly quest bug. If you're unable to collect Butterfly Chest #1,\nconsider using https://hogwarts-legacy-save-editor.vercel.app or https://www.nexusmods.com/hogwartslegacy/mods/778 to fix it.") << std::endl;
         if (fs && fs.is_open()) {
-            fs << std::endl << dye::red("Your save seems to be affected by the butterfly quest bug. If you're unable to collect\nButterfly Chest #1, consider using https://hogwarts-legacy-save-editor.vercel.app to fix it.") << std::endl;
+            fs << std::endl << dye::red("Your save seems to be affected by the butterfly quest bug. If you're unable to collect Butterfly Chest #1,\nconsider using https://hogwarts-legacy-save-editor.vercel.app or https://www.nexusmods.com/hogwartslegacy/mods/778 to fix it.") << std::endl;
         }
     }
     if (hasConjurationBug(queryResults, queryErrors, conjurationChestsOpened)) {
